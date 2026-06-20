@@ -18,4 +18,8 @@ See [this github gist](https://gist.github.com/CianMRoche/ce176a089c06fd81d26f33
 
 
 
-* This tutorial is a work in Progress. 
+
+
+
+
+    Please note that this tutorial is a work in Progress. 
