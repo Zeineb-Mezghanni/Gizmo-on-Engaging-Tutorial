@@ -4,6 +4,59 @@ and more detail about the code can be found [here](http://www.tapir.caltech.edu/
 
 #### 1. You will find the code in [this repository](https://github.com/pfhopkins/gizmo-public) git clone it to download Gizmo. 
 
+**!!!! More work to be done here: check with Abdelaziz about the code he fixed last year**
+
+
+Some snippets of messages about this matter:
+
+I have a few updates and fixes to share. Everything I will mention is referring to edits made to the gizmo stored in ```/work2/09020/tg883191/frontera/gizmo-apr2```
+
+For eta ( limits the timestep for a particle with a large acceleration value):
+I have added a print statement so that the value is written in  gizmo.out , the print statement should read something like this:
+The Value of Eta or ```ErrTolIntAccuracy=0.001``` I have further commented out the lines rewriting the eta value we discussed which are:
+``` #if !defined(SINGLE_STAR_AND_SSP_HYBRID_MODEL)
+//     if (All.ComovingIntegrationOn)
+//     {
+//         All.ErrTolForceAcc = 0.005;
+//         All.ErrTolIntAccuracy = 0.05;
+//     }
+// #endif 
+```
+
+For Kappa (limit for the probability of scattering for a given time step):
+In essence, there are two checks being done to ensure that the probability calculated doesn't exceed a certain threshold in two places timestep.c and sidm_core_flux_calculation.h. Not only are the kappa values, or upper bounds on the probability of scattering, different in these two files, but further the probabilities checked against are calculated differently. In ```timestep.c``` we have ```double p_dt = prob_of_interaction(P[p].Mass, 0., PPP[p].AGS_Hsml, dV, dt)```;  while in ```sidm_core_flux_calculation.h``` we have the following ```double prob = prob_of_interaction(m_si, kernel.r, h_si, kernel.dv, local.dtime)```;
+
+Where ```prob_of_interaction``` is defined in ```sidm_core.c``` as follows:
+```double prob_of_interaction(double mass, double r, double h_si, double dV[3], double dt)
+{
+    double dVmag = sqrt(dV[0]*dV[0]+dV[1]*dV[1]+dV[2]*dV[2]) / All.cf_atime; // velocity in physical
+    double rho_eff = mass / (h_si*h_si*h_si) * All.cf_a3inv; // density in physical
+    double cx_eff = All.DM_InteractionCrossSection * g_geo(r/h_si); // effective cross section (physical) scaled to cgs
+    double units = UNIT_SURFDEN_IN_CGS; // needed to convert everything to cgs
+    if(All.DM_InteractionVelocityScale>0) {double x=dVmag/All.DM_InteractionVelocityScale; cx_eff/=1+x*x*x*x;} // take velocity dependence
+    return rho_eff * cx_eff * dVmag * dt * units; // dimensionless probability
+}
+
+double g_geo(double r)
+{
+    double f, u; int i; u = r / 2.0 * GEOFACTOR_TABLE_LENGTH; i = (int) u;
+    if(i >= GEOFACTOR_TABLE_LENGTH) {i = GEOFACTOR_TABLE_LENGTH - 1;}
+    if(i <= 1) {f = 0.992318  + (GeoFactorTable[0] - 0.992318)*u;} else {f = GeoFactorTable[i - 1] + (GeoFactorTable[i] - GeoFactorTable[i - 1]) * (u - i);}
+    return f;
+}
+```
+
+Here is the message from Phil explaining the difference:
+first off, the initial input "dt" being rescaled is different. in timestep.c, its the predicted timestep you will need to take for the next timestep (which, at the end of timestep.c, becomes the timestep, after passing all its checks and taking the minimum). In sidm_core_flux, it's the current timestep. Effectively sidm_core_flux is occuring midway through a timestep, while timestep.c occurs at the very end of one and beginning of the next. Second, the probability is calculated differently. you call the same "prob_of_interaction" function, but the inputs are all different: in timestep.c, you only know information local to a single cell/particle, so it uses the single-particle mass, distance = 0, effective SIDM kernel size AGS_Hsml, predicted timestep dt, and signal velocity AGS_vsig for dV oriented at an arbitrary angle. In sidm_core_flux, the probability is calculated separately for every pair of interacting neighbor particles that can causally have a chance of interaction with particle "i" in that timestep. For each pair, you calculate the -pairwise- probability of an interaction, which means you call the function with the mean particle mass, an average value of their kernel sizes, the separation equal to the actual center-of-mass separation of the cells, velocity term equal to the particle-particle relative velocity, and timestep equal to the current timestep using the minimum of the two interacting particle timesteps. Then you take the minimum over all interacting neighbors, and pass that to timestep.c to use it to help guess the -next- timestep. So in a smooth, reasonably well-behaved, well-particle-ordered system, they'll give similar answers, but still not identical, and if e.g. you have a single high-speed particle moving through a group (for velocity-independent cross-sections), they will get smaller steps (for the same 'target' probability), or other single-particle deviations, from the sidm_core_flux routine.In short, in one file you calculate the pairwise probability, while in the other, you calculate the probability using only information local to a single particle. The latter , which is in  timestep.c  makes less physical sense to me in the core collapse regime? Since it is only a proxy and the intuition I have for it is " the probability that if this particle were immersed in a medium of particles like itself, with density implied by its kernel, it would scatter in this time step".  Whether we need both checks or not is a good question that I am still trying to wrap my head around, I asked Phil but he hasn't responded yet, if anyone has ideas please let me know.
+
+To consolidate the probability upper bounds, I have defined a global variable as follows:
+in ```allvars.h``` I added inside of ```global_data_all_process``` and the ```if SIDM``` statement:
+```
+MyDouble DM_scattering_prob_upper_bound which is kappa and then I define its value in begrun.c. So now all one needs to do is define kappa and eta once in begrun.c in the following lines:
+    All.ErrTolIntAccuracy = 0.001; // eta
+    All.DM_scattering_prob_upper_bound = 0.2; //Kappa
+```
+
 
 #### 2. Copy Template-Config.sh to Config.sh and Template-Makefile.systype to Makefile.systype
 
