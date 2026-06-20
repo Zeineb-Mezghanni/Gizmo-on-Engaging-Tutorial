@@ -2,19 +2,19 @@ The official Gizmo documentation can be found [here](http://www.tapir.caltech.ed
 
 and more detail about the code can be found [here](http://www.tapir.caltech.edu/~phopkins/Site/GIZMO.html)
 
-## You will find the code in [this repository](https://github.com/pfhopkins/gizmo-public) git clone it to download Gizmo. 
+#### You will find the code in [this repository](https://github.com/pfhopkins/gizmo-public) git clone it to download Gizmo. 
 
 
-## Copy Template-Config.sh to Config.sh and Template-Makefile.systype to Makefile.systype
+#### Copy Template-Config.sh to Config.sh and Template-Makefile.systype to Makefile.systype
 
-## In the file named Makefile.systype check there is this line:
+#### In the file named Makefile.systype check there is this line:
 ```
 SYSTYPE="engaging"
 ```
 and keep all the other lines commented out (starting with a #) 
 
 
-## Modify the following lines like this in the Makefile:
+#### Modify the following lines like this in the Makefile:
 
 ```
 ifeq ($(SYSTYPE),"engaging")
@@ -38,12 +38,12 @@ Use "module show <module-name>" to check the paths, for example, "module show ff
 You can set FFTW3_HOME=/orcd/software/core/001/spack/pkg/fftw/3.3.10/2qziucy and all other paths in Makefile
 
 
-## Load the modules:
+#### Load the modules:
 
 module load openmpi/4.1.4 hdf5/1.14.3 gsl/2.7.1 fftw/3.3.10
 
 
-## Check all libs are available:
+#### Check all libs are available:
 
 in your terminal type:  ldd GIZMO
 
@@ -74,7 +74,7 @@ libiconv.so.2 => /orcd/software/core/001/spack/pkg/libiconv/1.17/hgnhhb7/lib/lib
 
 
 
-## build the program:
+#### build the program:
 
 in the directory run "make clean" then "make"
 
