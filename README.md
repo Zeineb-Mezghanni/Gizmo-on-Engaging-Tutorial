@@ -2,7 +2,7 @@
 Follow the instructions given on 
 https://orcd-docs.mit.edu/getting-started/
 
-# Setting up Gizmo on Engaging
+# SettingUpGizmoOnEngaging
 
 
 # Random (By CianMRoche)
