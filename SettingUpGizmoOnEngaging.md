@@ -2,19 +2,19 @@ The official Gizmo documentation can be found [here](http://www.tapir.caltech.ed
 
 and more detail about the code can be found [here](http://www.tapir.caltech.edu/~phopkins/Site/GIZMO.html)
 
-#### You will find the code in [this repository](https://github.com/pfhopkins/gizmo-public) git clone it to download Gizmo. 
+#### 1. You will find the code in [this repository](https://github.com/pfhopkins/gizmo-public) git clone it to download Gizmo. 
 
 
-#### Copy Template-Config.sh to Config.sh and Template-Makefile.systype to Makefile.systype
+#### 2. Copy Template-Config.sh to Config.sh and Template-Makefile.systype to Makefile.systype
 
-#### In the file named Makefile.systype check there is this line:
+#### 3. In the file named Makefile.systype check there is this line:
 ```
 SYSTYPE="engaging"
 ```
 and keep all the other lines commented out (starting with a #) 
 
 
-#### Modify the following lines like this in the Makefile:
+#### 4. Modify the following lines like this in the Makefile:
 
 ```
 ifeq ($(SYSTYPE),"engaging")
@@ -35,20 +35,21 @@ endif
 
 Use "module show <module-name>" to check the paths, for example, "module show fftw/3.3.10"
 
-You can set FFTW3_HOME=/orcd/software/core/001/spack/pkg/fftw/3.3.10/2qziucy and all other paths in Makefile
+Then set ```FFTW3_HOME=/orcd/software/core/001/spack/pkg/fftw/3.3.10/2qziucy``` and all other paths in Makefile
 
 
-#### Load the modules:
+#### 5. Load the modules:
 
-module load openmpi/4.1.4 hdf5/1.14.3 gsl/2.7.1 fftw/3.3.10
+```module load openmpi/4.1.4 hdf5/1.14.3 gsl/2.7.1 fftw/3.3.10```
 
 
-#### Check all libs are available:
+#### 6. Check all libs are available:
 
-in your terminal type:  ldd GIZMO
+in your terminal type:  ```ldd GIZMO```
 
-you should find something like this: 
+you should get something like this: 
 
+```
 linux-vdso.so.1 (0x00007ffd9f6ed000)
 libhdf5.so.310 => /orcd/software/community/001/spack/pkg/hdf5/1.14.3/suffu3v/lib/libhdf5.so.310 (0x00007f5b49f75000)
 libz.so.1 => /lib64/libz.so.1 (0x00007f5b49d5d000)
@@ -71,20 +72,11 @@ libpciaccess.so.0 => /orcd/software/core/001/spack/pkg/libpciaccess/0.17/urkcbku
 libxml2.so.2 => /orcd/software/core/001/spack/pkg/libxml2/2.10.3/hi7cu4u/lib/libxml2.so.2 (0x00007f5b4721b000)
 liblzma.so.5 => /orcd/software/core/001/spack/pkg/xz/5.4.6/kketj7w/lib/liblzma.so.5 (0x00007f5b46fed000)
 libiconv.so.2 => /orcd/software/core/001/spack/pkg/libiconv/1.17/hgnhhb7/lib/libiconv.so.2 (0x00007f5b46ce2000)
+```
 
 
-
-#### build the program:
+#### 7. Build the program:
 
 in the directory run "make clean" then "make"
 
 Warnings are okay as long as the code compiles! 
-
-
-
-
-
-
-
-Once installed, cd into the directory of *gizmo-public* and module load the following from the terminal: 
-#### 
