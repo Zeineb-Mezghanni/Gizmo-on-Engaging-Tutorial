@@ -9,6 +9,14 @@ Presents the steps (or the link) to download Gizmo and set it up on Engaging.
 
 Disclaimer: This is accurate as of November 2025 but dependencies and versions may have changed since. 
 
+
+# GlueGalaxies
+Notebook written by Benjamin C. Dodge and edited by Zeineb Mezghanni
+
+Allows to wite a new ics file that include 2 galaxies (outputs of GalIC code). This will be the input file of the Gizmo code. 
+
+
+
 # CheckListToRunJobs
 Presents a check list to make sure simulations are running correctly. 
 
