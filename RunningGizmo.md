@@ -10,13 +10,20 @@ a useful guide can be found in the [engaging documentation](https://orcd-docs.mi
 
 some useful flags are:
 
-`-N` for the numebr of nordes \\
-`--ntasks-per-node`\\
-`-p` for the partition (on engaging the Necib group uses: `pi_lnecib`) \\
-`--mem-per-cpu`
-`-t` for max time in days-hours:minutes
-`-o` for the output file 
-`-e` for the error file 
+`-N` for the numebr of nordes \
+
+`--ntasks-per-node`\
+
+`-p` for the partition (on engaging the Necib group uses: `pi_lnecib`) \
+
+`--mem-per-cpu` \
+
+`-t` for max time in days-hours:minutes \
+
+`-o` for the output file \
+
+`-e` for the error file \
+
 
 make sure to lad the packages you need 
 example: 
