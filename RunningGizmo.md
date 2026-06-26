@@ -35,6 +35,7 @@ for checks, I like to use:
 you can add to the end of your slurm: 
 `mpirun -oversubscribe --mca orte_base_help_aggregate 0 -np 140 $1 $2 $3` 
 
-then from the terminal submit the job using:
+#### 3. Submit the job
+from the terminal submit the job using:
 
 `sbatch path/to/slurm/file path/to/excecutable path/to/param/file 0 (or 1 if you are restarting the sim)`
